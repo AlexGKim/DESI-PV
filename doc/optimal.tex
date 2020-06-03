@@ -1,0 +1,72 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+%SetFonts
+
+%SetFonts
+
+
+\title{Brief Article}
+\author{The Author}
+%\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+%\section{}
+%\subsection{}
+
+Given $N$ pointings what is there optimal placement to determine their placement to optimize the determination of the asymptotic velocity.
+
+The data are composed of $N$ measurements.  Each have
+\begin{itemize}
+\item $\hat{\theta}$ - angular coordinate.
+\item $\hat{v}$ - velocity measurement
+\end{itemize}
+The velocity measurement uncertainties are given by $\sigma_v$.  In our notation measurements are given a hat.
+
+The true positions of the measurements are assumed to be
+\begin{equation}
+\theta \sim \mathcal{N}(\hat{\theta},\sigma_\theta),
+\end{equation}
+where $\sigma_\theta$ is the positioning error.
+
+The velocity $v$ along the semi-major axis is modeled as a hyperbolic tangent
+\begin{equation}
+f=v_\infty \tanh{\left(\frac{\theta - \theta_0}{a}\right)},
+\end{equation}
+where the model parameters are
+\begin{itemize}
+\item $v_\infty$ - Asymptotic rotation velocity.
+\item $\theta$ - Coordinate of the measurement
+\item $\theta_0$ - Coordinate of the galaxy centroid. 
+\item $a$ - Galaxy length along the semi-major axis.
+\end{itemize}
+The corresponding partial derivatives for the model prediction for measurement $i$ are
+\begin{itemize}
+\item $\partial f/ \partial v_\infty =  \tanh{\left(\frac{\theta_i - \theta_0}{a}\right)}$
+\item $\partial f/ \partial\theta_j = v_\infty  \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)} \delta^D_{ij}$ 
+\item $\partial f/ \partial\theta_0 = -\frac{v_\infty }{a} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)}$ 
+\item $\partial f/ \partial a =- v_\infty  \frac{\theta_i - \theta_0}{a^2} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)}$
+\end{itemize}
+
+The Fisher matrix elements are then
+\begin{itemize}
+\item $F_{v_\infty v_\infty} = \sum_i \sigma_{v_i}^{-2}  \tanh^2{\left(\frac{\theta_i - \theta_0}{a}\right)} $
+\item $F_{v_\infty \theta_i}  =  v_\infty  \sigma_{v_i}^{-2} \tanh{\left(\frac{\theta_i - \theta_0}{a}\right)} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)}  $ 
+\item $F_{v_\infty \theta_0}  =  -\frac{v_\infty }{a} \sum_i  \sigma_{v_i}^{-2}  \tanh{\left(\frac{\theta_i - \theta_0}{a}\right)} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
+\item $F_{v_\infty a}  =  -\frac{v_\infty }{a^2} \sum_i  (\theta_i - \theta_0) \sigma_{v_i}^{-2}  \tanh{\left(\frac{\theta_i - \theta_0}{a}\right)} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
+\item $F_{\theta_i \theta_j}  = ( v_\infty^2  \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} + \sigma_\theta^{-2}) \delta^D_{ij}$ 
+\item $F_{\theta_i \theta_0}  =  - \frac{v_\infty^2}{a}  \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
+\item $F_{\theta_i a}  =  - \frac{v_\infty^2}{a^2}   (\theta_i - \theta_0) \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
+\item $F_{\theta_0 \theta_0}  =   \frac{v_\infty^2}{a^2} \sum_i \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
+\item $F_{\theta_0 a}  =   \frac{v_\infty^2}{a^3} \sum_i  (\theta_i - \theta_0)  \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
+\item $F_{a a}  =   \frac{v_\infty^2}{a^4} \sum_i  (\theta_i - \theta_0)^2  \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
+\end{itemize}
+\end{document}  
