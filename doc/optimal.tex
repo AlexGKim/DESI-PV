@@ -51,20 +51,20 @@ where the model parameters are
 The corresponding partial derivatives for the model prediction for measurement $i$ are
 \begin{itemize}
 \item $\partial f/ \partial v_\infty =  \tanh{\left(\frac{\theta_i - \theta_0}{a}\right)}$
-\item $\partial f/ \partial\theta_j = v_\infty  \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)} \delta^D_{ij}$ 
+\item $\partial f/ \partial\theta_j = \frac{v_\infty }{a} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)} \delta^D_{ij}$ 
 \item $\partial f/ \partial\theta_0 = -\frac{v_\infty }{a} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)}$ 
-\item $\partial f/ \partial a =- v_\infty  \frac{\theta_i - \theta_0}{a^2} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)}$
+\item $\partial f/ \partial a =-\frac{v_\infty }{a^2} (\theta_i - \theta_0)\text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)}$
 \end{itemize}
 
 The Fisher matrix elements are then
 \begin{itemize}
 \item $F_{v_\infty v_\infty} = \sum_i \sigma_{v_i}^{-2}  \tanh^2{\left(\frac{\theta_i - \theta_0}{a}\right)} $
-\item $F_{v_\infty \theta_i}  =  v_\infty  \sigma_{v_i}^{-2} \tanh{\left(\frac{\theta_i - \theta_0}{a}\right)} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)}  $ 
+\item $F_{v_\infty \theta_i}  = \frac{v_\infty }{a} \sigma_{v_i}^{-2} \tanh{\left(\frac{\theta_i - \theta_0}{a}\right)} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)}  $ 
 \item $F_{v_\infty \theta_0}  =  -\frac{v_\infty }{a} \sum_i  \sigma_{v_i}^{-2}  \tanh{\left(\frac{\theta_i - \theta_0}{a}\right)} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
 \item $F_{v_\infty a}  =  -\frac{v_\infty }{a^2} \sum_i  (\theta_i - \theta_0) \sigma_{v_i}^{-2}  \tanh{\left(\frac{\theta_i - \theta_0}{a}\right)} \text{sech}^2{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
-\item $F_{\theta_i \theta_j}  = ( v_\infty^2  \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} + \sigma_\theta^{-2}) \delta^D_{ij}$ 
-\item $F_{\theta_i \theta_0}  =  - \frac{v_\infty^2}{a}  \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
-\item $F_{\theta_i a}  =  - \frac{v_\infty^2}{a^2}   (\theta_i - \theta_0) \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
+\item $F_{\theta_i \theta_j}  = ( \frac{v_\infty^2 }{a^2}  \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} + \sigma_\theta^{-2}) \delta^D_{ij}$ 
+\item $F_{\theta_i \theta_0}  =  - \frac{v_\infty^2}{a^2}  \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
+\item $F_{\theta_i a}  =  - \frac{v_\infty^2}{a^3}   (\theta_i - \theta_0) \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
 \item $F_{\theta_0 \theta_0}  =   \frac{v_\infty^2}{a^2} \sum_i \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
 \item $F_{\theta_0 a}  =   \frac{v_\infty^2}{a^3} \sum_i  (\theta_i - \theta_0)  \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
 \item $F_{a a}  =   \frac{v_\infty^2}{a^4} \sum_i  (\theta_i - \theta_0)^2  \sigma_{v_i}^{-2}\text{sech}^4{\left(\frac{\theta_i - \theta_0}{a}\right)} $ 
