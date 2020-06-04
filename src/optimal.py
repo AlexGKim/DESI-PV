@@ -70,13 +70,22 @@ def sigmas_v(norm, background, fiducial, profile, **kwargs):
   return norm* numpy.sqrt(background + gflux)/gflux
 
 def x_to_theta(x):
-  x[1:] = numpy.exp(x[1:])
+  x[1:] = numpy.exp(x[1:]/100)
   theta_i = numpy.array(x)
   for i in range(1,len(x)):
     theta_i[i]=theta_i[i-1]+x[i]
-  return theta_i  
+  return theta_i
 
-def objective(x, fisher,index=0):
+def theta_to_x(theta):
+  x=numpy.array(theta)
+  delta = numpy.roll(theta,-1)-theta
+  x[1:]= 100*numpy.log(delta[:-1])
+  return x
+
+def objective(x, fisher,index=0, zero=False):
+
+  if zero:
+    x=numpy.append(x,0)
 
   theta_i = x_to_theta(x)
 
@@ -97,7 +106,7 @@ def main():
   fiducial['v_inf']=1.
   fiducial['theta_i']=numpy.array([-1,-0.5,.5,1])
   fiducial['theta_0']=0.
-  fiducial['a']=0.75
+  fiducial['a']=1.
 
   #values of the measurement errors
   sigmas = sigmas_v(0.1, 0, fiducial, sersicProfile)
@@ -105,11 +114,27 @@ def main():
 
   f  = Fisher(fiducial, sigmas, sigmas_theta)
 
-  x0=numpy.full(len(fiducial['theta_i']),-1)
-  res = minimize(objective, x0, method='powell',args=(f), options={'xatol': 1e-8, 'disp': False})
-  print(x_to_theta(res.x))
-  res = minimize(objective, x0, method='powell',args=(f,-1), options={'xatol': 1e-8, 'disp': False})
-  print(x_to_theta(res.x))
+
+  x0=theta_to_x(numpy.array([-1,-0.5,.5,1]))
+  res = minimize(objective, x0, method='powell',args=(f), options={'xtol': 1e-8, 'disp': False})
+  print(x_to_theta(res.x), res.fun)
+
+  x0=theta_to_x(numpy.array([-1,-0.5,.5,1]))
+  res = minimize(objective, x0, method='powell',args=(f,-1), options={'xtol': 1e-8, 'disp': False})
+  print(x_to_theta(res.x), res.fun)
+
+  # x0=theta_to_x(numpy.array([-1,-0.67,-0.33,0]))
+  # res = minimize(objective, x0, method='powell',args=(f,-1), options={'xtol': 1e-8, 'disp': False})
+  # print(x_to_theta(res.x), res.fun)
+  # wefwe
+
+  x0=theta_to_x(numpy.array([-1,-0.5,.5,1]))
+  res = minimize(objective, x0, method='powell',args=(f,0,True), options={'xtol': 1e-8, 'disp': False})
+  print(x_to_theta(res.x), res.fun)
+
+  x0=theta_to_x(numpy.array([-1,-0.5,.5,1]))
+  res = minimize(objective, x0, method='powell',args=(f,-1,True), options={'xtol': 1e-8, 'disp': False})
+  print(x_to_theta(res.x), res.fun)
 
 if __name__ == "__main__":
     # execute only if run as a script
