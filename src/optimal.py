@@ -61,7 +61,7 @@ class Fisher(object):
     return F
 
 
-def sersicProfile(fiducial, n=4.):
+def sersicProfile(fiducial, n=1.):
   b=2*n-1./3
   return numpy.exp(-b*((numpy.abs(fiducial['theta_i']-fiducial['theta_0'])/fiducial['a'])**(1./n) -1))
 
@@ -82,7 +82,7 @@ def theta_to_x(theta):
   x[1:]= 100*numpy.log(delta[:-1])
   return x
 
-def objective(x, fisher,index=0, zero=False):
+def objective(x, fisher, profile, index=0, zero=False):
 
   if zero:
     x=numpy.append(x,0)
@@ -94,7 +94,7 @@ def objective(x, fisher,index=0, zero=False):
 
   fisher.set_fiducial(fiducial)
 
-  fisher.set_sigmas(sigmas_v(0.1, 0, fiducial, sersicProfile))
+  fisher.set_sigmas(sigmas_v(0.1, 0, fiducial, profile))
   f = fisher.fmatrix()
   ans = numpy.sqrt(numpy.linalg.inv(f)[index,index])
   return ans
@@ -116,11 +116,11 @@ def main():
 
 
   x0=theta_to_x(numpy.array([-1,-0.5,.5,1]))
-  res = minimize(objective, x0, method='powell',args=(f), options={'xtol': 1e-8, 'disp': False})
+  res = minimize(objective, x0, method='powell',args=(f, sersicProfile), options={'xtol': 1e-8, 'disp': False})
   print(x_to_theta(res.x), res.fun)
 
   x0=theta_to_x(numpy.array([-1,-0.5,.5,1]))
-  res = minimize(objective, x0, method='powell',args=(f,-1), options={'xtol': 1e-8, 'disp': False})
+  res = minimize(objective, x0, method='powell',args=(f, sersicProfile,-1), options={'xtol': 1e-8, 'disp': False})
   print(x_to_theta(res.x), res.fun)
 
   # x0=theta_to_x(numpy.array([-1,-0.67,-0.33,0]))
@@ -129,11 +129,11 @@ def main():
   # wefwe
 
   x0=theta_to_x(numpy.array([-1,-0.5,.5,1]))
-  res = minimize(objective, x0, method='powell',args=(f,0,True), options={'xtol': 1e-8, 'disp': False})
+  res = minimize(objective, x0, method='powell',args=(f, sersicProfile,0,True), options={'xtol': 1e-8, 'disp': False})
   print(x_to_theta(res.x), res.fun)
 
   x0=theta_to_x(numpy.array([-1,-0.5,.5,1]))
-  res = minimize(objective, x0, method='powell',args=(f,-1,True), options={'xtol': 1e-8, 'disp': False})
+  res = minimize(objective, x0, method='powell',args=(f, sersicProfile,-1,True), options={'xtol': 1e-8, 'disp': False})
   print(x_to_theta(res.x), res.fun)
 
 if __name__ == "__main__":

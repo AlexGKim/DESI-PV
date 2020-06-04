@@ -21,16 +21,37 @@
 \maketitle
 %\section{}
 %\subsection{}
+\abstract{
+The purpose of this analysis:
+Given $N$ pointings determine the placement of fibers that optimizes the determination of the asymptotic velocity
+of the rotation curve of a spiral galaxy.
+The procedure: Determine the combination of positions that minimize the uncertainty of the asymptotic velocity
+as estimated from Fisher Matrix calculations.
+}
 
-Given $N$ pointings what is there optimal placement to determine their placement to optimize the determination of the asymptotic velocity.
-
-The data are composed of $N$ measurements.  Each have
+\section{Data}
+The data are composed of $N$ measurements.  Each have a
 \begin{itemize}
-\item $\hat{\theta}$ - angular coordinate.
-\item $\hat{v}$ - velocity measurement
+\item $\hat{\theta}$ - the angular coordinate where we think the fiber was positioned.
+\item $\hat{v}$ - velocity measurement.
 \end{itemize}
-The velocity measurement uncertainties are given by $\sigma_v$.  In our notation measurements are given a hat.
+Measurements are notated by the hat.
 
+The velocity measurement uncertainties are given by $\sigma_v$.  
+This uncertainty is taken to be the proportional to the inverse of the signal-to-noise of the flux measurement of the feature, that is
+\begin{align*}
+\sigma_v & \propto \frac{\sqrt{S + B}}{S},
+\end{align*}
+where $S$ and $B$ are the source and background fluxes respectively.
+For $S$ we use the light of the spiral arm, which according to Wikipedia is well described by an exponential profile,
+\begin{equation}
+S \propto \exp{\left(-b \frac{\theta}{R_e}\right)},
+\end{equation}
+where $b \approx 5/3$ and $R_e$ is the half-light radius.
+
+
+
+\section{Model}
 The true positions of the measurements are assumed to be
 \begin{equation}
 \theta \sim \mathcal{N}(\hat{\theta},\sigma_\theta),
@@ -49,6 +70,15 @@ where the model parameters are
 \item $a$ - Galaxy length along the semi-major axis.
 \item $v_0$ - the nominal redshift of the galaxy
 \end{itemize}
+
+
+The elements of the Fisher Matrix for the above model is given in \S\ref{sec:fisher}.
+Of primary interest to us is the uncertainty in the asymptotic velocity $\sqrt{F^{-1}_{v_\infty v_\infty}}$ though
+the redshift of the galaxy  $\sqrt{F^{-1}_{v_0 v_0}}$ is also important.
+
+\appendix
+\section{Fisher Matrix Elements}
+\label{sec:fisher}
 The corresponding partial derivatives for the model prediction for measurement $i$ are
 \begin{itemize}
 \item $\partial f/ \partial v_\infty =  \tanh{\left(\frac{\theta_i - \theta_0}{a}\right)}$
