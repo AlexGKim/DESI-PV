@@ -155,13 +155,13 @@ def defaultFisher():
   sigma_v_max=1.    # units don't matter for optimization
   theta_max=4       # all theta units in optical R_e
   background=0.
-  sigmas_theta = 0.2/30. # say an uncertainty of 0.2" for an R_e=30"
+  sigmas_theta = 0.01 # say an uncertainty of 0.2" for an R_e=30"
   noiseModel = MaxNoiseModel(theta_max, sigma_v_max, background, sersicProfile, sigmas_theta)
 
   return PositionFisher(fiducial, noiseModel)
 
 
-def fix_theta_max():
+def vary_a():
   f = defaultFisher()
   theta_max = f.noiseModel.theta_max
   theta_start  = numpy.array([-0.9*theta_max,0.45*theta_max,0.9*theta_max])
@@ -181,8 +181,9 @@ def fix_theta_max():
   plt.xlabel(r'$\theta [R_e]$')
   plt.ylabel(r'$a [R_e]$')
   plt.ylim((a_s[0],a_s[-1]))
-  plt.title(r'$\theta_\mathrm{max} = 4 [R_e]$')
-  plt.savefig('fix_theta_max.pdf')
+  plt.title(r'$\theta^\mathrm{max} = 4 [R_e]$, $\sigma_\theta=0.01 [R_e]$')
+  plt.savefig('vary_a.pdf')
+  plt.clf()
   # print(x_to_theta(res.x), res.fun)
 
 
@@ -200,12 +201,12 @@ def fix_theta_max():
   # res = minimize(objective, x0, method='powell',args=(f, noiseModel,-1,True), options={'xtol': 1e-8, 'disp': False})
   # print(x_to_theta(res.x), res.fun)
 
-def fix_a():
+def vary_theta_max():
   f = defaultFisher()
   f.fiducial['a']=4.
 
 
-  theta_maxs =  numpy.arange(1,4.01,0.1)
+  theta_maxs =  numpy.arange(1,4.01,0.1) 
   ans=[]
   for theta_max in theta_maxs:
     f.noiseModel.theta_max=theta_max
@@ -219,15 +220,40 @@ def fix_a():
   plt.plot(ans,theta_maxs)
   plt.axvline(0)
   plt.xlabel(r'$\theta [R_e]$')
-  plt.ylabel(r'$\theta_\mathrm{max} [R_e]$')
+  plt.ylabel(r'$\theta^\mathrm{max} [R_e]$')
   plt.ylim((theta_maxs[0],theta_maxs[-1]))
-  plt.title(r'$a = 4 [R_e]$')
-  plt.savefig('fix_a.pdf')
+  plt.title(r'$a = 4 [R_e]$, $\sigma_\theta=0.01$  [R_e]')
+  plt.savefig('vary_theta_max.pdf')
+  plt.clf()
 
+def vary_sigma_theta():
+  f = defaultFisher()
+  theta_max = f.noiseModel.theta_max
+  theta_start  = numpy.array([-0.9*theta_max,0.45*theta_max,0.9*theta_max])
+  x0=theta_to_x(theta_start)
+
+  sigmas_thetas = 10**numpy.arange(-3,-0.99,0.1)
+  ans=[]
+  for sigmas_theta in sigmas_thetas:
+    f.noiseModel.sigmas_theta=sigmas_theta
+    res = minimize(objective, x0, method='Nelder-Mead',args=(f, 0,True), options={'xtol': 1e-16, 'ftol':1e-16, 'disp': False})
+    ans.append(x_to_theta(res.x))
+
+  ans = numpy.array(ans)
+
+  plt.plot(ans,sigmas_thetas)
+  plt.axvline(0)
+  plt.xlabel(r'$\theta [R_e]$')
+  plt.ylabel(r'$\sigma_\theta [R_e]$')
+  plt.ylim((0,sigmas_thetas[-1]))
+  plt.title(r'$\theta^\mathrm{max} = 4 [R_e]$, $a = 4 [R_e]$')
+  plt.savefig('vary_sigma_theta.pdf')
+  plt.clf()
 
 def main():
-  fix_theta_max()
-  # fix_a()
+  vary_theta_max()
+  vary_a()
+  vary_sigma_theta()
 
 if __name__ == "__main__":
     # execute only if run as a script

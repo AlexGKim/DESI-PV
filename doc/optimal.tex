@@ -35,6 +35,7 @@ The data are composed of $N$ measurements.  Each have a
 \item $\hat{\theta}$ - the angular coordinate where we think the fiber was positioned.
 \item $\hat{v}$ - velocity measurement.
 \end{itemize}
+There are a total of $2N$ measurements.
 Measurements are notated by the hat.
 
 The velocity measurement uncertainties are given by $\sigma_v$.  
@@ -50,16 +51,20 @@ S \propto \exp{\left(-b \frac{|\theta|}{R_e}\right)},
 where $b \approx 5/3$ and $R_e$ is the half-light radius.
 
 When the signal to noise gets poor enough a velocity measurement cannot even be obtained, meaning that there 
-is a maximum angular separation from the core $\theta^{\text{max}}$  with a velocity  measurement.  Anticipating a Fisher matrix analysis, which does not accommodate the
+is a maximum angular separation from the core $\theta^{\text{max}}$  with a velocity  measurement
+that has the largest possible uncertainty $ \sigma_v^\text{max}$.  Anticipating a Fisher matrix analysis, which does not accommodate the
 discrete dropout of data, we take
 \begin{equation}
 \sigma_v = 
 	\begin{cases}
 	 \sigma_v^\text{max} \exp{\left(b \frac{|\theta|-\theta^\text{max}}{R_e}\right)} \sqrt{\frac{\exp{\left(-b \frac{|\theta|}{R_e}\right)}+ B'}{\exp{\left(-b \frac{\theta^\text{max}}{R_e}\right)}+B'}} & |{\theta}| < \theta^{\text{max}}\\
-	 \sigma_v^\text{max} \exp{\left(b \frac{|\theta|-\theta^\text{max}}{R_e}\right)} &  |{\theta}| \ge \theta^{\text{max}} 
+	 \sigma_v^\text{max} \exp{\left(c \frac{|\theta|-\theta^\text{max}}{R_e}\right)} &  |{\theta}| \ge \theta^{\text{max}} 
 	 \end{cases}.
 \end{equation}
-There are three parameters in the noise model of a galaxy, $\sigma_v^\text{max}$, $\theta^\text{max}/R_e$, and $B'$.
+In this note, we take $c=5>b$.
+There are three parameters in the noise model of a galaxy, the maximum possible uncertainty
+$\sigma_v^\text{max}$, the radius where that occurs $\theta^\text{max}/R_e$, and the relative flux
+of the source and background $B'$.
 
 
 \section{Model}
@@ -81,11 +86,72 @@ where the model parameters are
 \item $a$ - Galaxy length along the semi-major axis.
 \item $v_0$ - the nominal redshift of the galaxy
 \end{itemize}
-
+There are a total of $4+N$ parameters.
 
 The elements of the Fisher Matrix for the above model is given in \S\ref{sec:fisher}.
-Of primary interest to us is the uncertainty in the asymptotic velocity $\sqrt{F^{-1}_{v_\infty v_\infty}}$ though
-the redshift of the galaxy  $\sqrt{F^{-1}_{v_0 v_0}}$ is also important.
+
+\section{Results for DESI}
+DESI is interested in measuring Tully-Fisher distances of large spiral galaxies. Each of these galaxies will have at
+least 4 measurements, one of which is at the core of the galaxy.  
+Of primary interest is the uncertainty in the asymptotic velocity $\sqrt{F^{-1}_{v_\infty v_\infty}}$.
+We therefore determine the placement of the three other fibers by minimizing this uncertainty.
+
+Before moving forward, it is worth mentioning that the optimal solution for four free fibers does not have one of them
+at the core.  In addition, we are ultimately interested in the peculiar velocity of the galaxy meaning that
+the uncertainty in $v_0$ is also relevant.  However, the fiber placements that optimize the galaxy redshift and rotation velocities differ.
+As we proceed, we take that a core measurement is immutable and that  the uncertainties in the rotation velocity
+dominate the peculiar velocity error budget.
+
+The optimal fiber placement depends the specific details of the galaxy: its signal-to-noise
+as described by the maximum radius where a rotation velocity can be measured $\theta^\text{max}$,
+ the length-scale of its rotation curve $a$, and its size relative
+to the fiber positioning uncertainty $\sigma_\theta$ (all considered in units of half-light radius $R_e$).
+
+The optimal fiber placements as a function of the angular extent where velocities can be measured
+$\theta^\text{max}$ for fixed values of $a$, $\sigma_\theta$,
+and $B'=0$ (source noise-dominated) are shown in Figure~\ref{fig:theta_max}.  When rotation velocities can be only measured
+out to small radii, small $\theta^\text{max}$, one of the fibers is best placed at the that extremum to provide
+as much leverage as possible in measuring the asymptote of the rotation curve.  Above a certain value
+of  $\theta^\text{max}$ the fiber placements are the same, the optimal solutions
+settling on the fixed velocity signal-to-noises at those positions.
+
+\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+   \centering
+   \includegraphics[width=4in]{../src/vary_theta_max.pdf} 
+   \caption{Optimal placements of three fibers, with one fixed at the core, as a function of $\theta^\text{max}$ for fixed values of $a=4$, $\sigma_\theta=0.01$,
+and $B'=0$. One of the four fibers is fixed at $\theta=0$.}
+   \label{fig:theta_max}
+\end{figure}
+
+The optimal fiber placements as a function of the scale of the rotation curve
+$a$ for fixed values of $\theta^\text{max}$, $\sigma_\theta$,
+and $B'=0$ are shown in Figure~\ref{fig:a}. 
+The value of $\theta^\text{max}$ is large enough to give velocity measurements over most of the galaxy and so represents the asymptotic solution discussed in the previous example.
+A broader angular extent is preferred for broader rotation curves and, within the phase space shown, there is no asymptotic fixed-position 
+solution.
+The value of $a$ will not be known before the measurement is made, either an independent estimate of $a$ or
+an effective value for the population could be used.
+
+\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+   \centering
+   \includegraphics[width=4in]{../src/vary_a.pdf} 
+   \caption{Optimal placements of three fibers, with one fixed at the core, as a function of $a$ for fixed values of $\theta^\text{max}=4$, $\sigma_\theta=0.01$,
+and $B'=0$. One of the four fibers is fixed at $\theta=0$.}
+   \label{fig:a}
+\end{figure}
+
+The optimal fiber placements as a function of the size of the galaxy in terms of the pointing error
+$\sigma_\theta$  for fixed values of $\theta^\text{max}$, $a$,
+and $B'=0$ are shown in Figure~\ref{fig:sigma_theta}. 
+There is a slight dependence on the galaxy size, with smaller galaxies preferring relatively higher radius fiber placement.
+ 
+\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+   \centering
+   \includegraphics[width=4in]{../src/vary_sigma_theta.pdf} 
+   \caption{Optimal placements of three fibers, with one fixed at the core, as a function of $\sigma_\theta=0.01$ for fixed values of  $\theta^\text{max}=4$,  $a=4$,
+and $B'=0$. One of the four fibers is fixed at $\theta=0$.}
+   \label{fig:sigma_theta}
+\end{figure}
 
 \appendix
 \section{Fisher Matrix Elements}
