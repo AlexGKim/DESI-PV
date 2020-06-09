@@ -45,10 +45,21 @@ This uncertainty is taken to be the proportional to the inverse of the signal-to
 where $S$ and $B$ are the source and background fluxes respectively.
 For $S$ we use the light of the spiral arm, which according to Wikipedia is well described by an exponential profile,
 \begin{equation}
-S \propto \exp{\left(-b \frac{\theta}{R_e}\right)},
+S \propto \exp{\left(-b \frac{|\theta|}{R_e}\right)},
 \end{equation}
 where $b \approx 5/3$ and $R_e$ is the half-light radius.
 
+When the signal to noise gets poor enough a velocity measurement cannot even be obtained, meaning that there 
+is a maximum angular separation from the core $\theta^{\text{max}}$  with a velocity  measurement.  Anticipating a Fisher matrix analysis, which does not accommodate the
+discrete dropout of data, we take
+\begin{equation}
+\sigma_v = 
+	\begin{cases}
+	 \sigma_v^\text{max} \exp{\left(b \frac{|\theta|-\theta^\text{max}}{R_e}\right)} \sqrt{\frac{\exp{\left(-b \frac{|\theta|}{R_e}\right)}+ B'}{\exp{\left(-b \frac{\theta^\text{max}}{R_e}\right)}+B'}} & |{\theta}| < \theta^{\text{max}}\\
+	 \sigma_v^\text{max} \exp{\left(b \frac{|\theta|-\theta^\text{max}}{R_e}\right)} &  |{\theta}| \ge \theta^{\text{max}} 
+	 \end{cases}.
+\end{equation}
+There are three parameters in the noise model of a galaxy, $\sigma_v^\text{max}$, $\theta^\text{max}/R_e$, and $B'$.
 
 
 \section{Model}
